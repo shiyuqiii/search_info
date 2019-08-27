@@ -1,0 +1,109 @@
+9
+1
+0
+2
+
+ 
+
+n
+a
+J
+ 
+
+3
+
+ 
+ 
+]
+
+V
+C
+.
+s
+c
+[
+ 
+ 
+
+1
+v
+6
+8
+6
+0
+0
+
+.
+
+1
+0
+9
+1
+:
+v
+i
+X
+r
+a
+
+Published as a conference paper at ICLR 2019
+
+GENERATING MULTIPLE OBJECTS AT
+SPATIALLY DISTINCT LOCATIONS
+
+Tobias Hinz, Stefan Heinrich, Stefan Wermter
+Knowledge Technology, Department of Informatics, Universit¨at Hamburg
+Vogt-Koelln-Str. 30, 22527 Hamburg, Germany
+https://www.inf.uni-hamburg.de/en/inst/ab/wtm/
+{hinz,heinrich,wermter}@informatik.uni-hamburg.de
+
+ABSTRACT
+
+Recent improvements to Generative Adversarial Networks (GANs) have made it
+possible to generate realistic images in high resolution based on natural language
+descriptions such as image captions. However, ﬁne-grained control of the image
+layout, i.e. where in the image speciﬁc objects should be located, is still difﬁcult to
+achieve. We introduce a new approach which allows us to control the location of
+arbitrarily many objects within an image by adding an object pathway to both the
+generator and the discriminator. Our approach does not need a detailed semantic
+layout but only bounding boxes and the respective labels of the desired objects
+are needed. The object pathway focuses solely on the individual objects and is
+iteratively applied at the locations speciﬁed by the bounding boxes. The global
+pathway focuses on the image background and the general image layout. We
+perform experiments on the Multi-MNIST, CLEVR, and the more complex MS-
+COCO data set. Our experiments show that through the use of the object pathway
+we can control object locations within images and can model complex scenes with
+multiple objects at various locations. We further show that the object pathway
+focuses on the individual objects and learns features relevant for these, while the
+global pathway focuses on global image characteristics and the image background.
+
+1
+
+INTRODUCTION
+
+Understanding how to learn powerful representations from complex distributions is the intriguing
+goal behind adversarial training on image data. While recent advances have enabled us to generate
+high-resolution images with Generative Adversarial Networks (GANs), currently most GAN models
+still focus on modeling images that either contain only one centralized object (e.g. faces (CelebA),
+objects (ImageNet), birds (CUB-200), ﬂowers (Oxford-102), etc.) or on images from one speciﬁc
+domain (e.g. LSUN bedrooms, LSUN churches, etc.). This means that, overall, the variance between
+images used for training GANs tends to be low (Raj et al., 2017). However, many real-life images
+contain multiple distinct objects at different locations within the image and with different relations to
+each other. This is for example visible in the MS-COCO data set (Lin et al., 2014), which consists of
+images of different objects at different locations within one image. In order to model images with
+these complex relationships, we need models that can model images containing multiple objects
+at distinct locations. To achieve this, we need control over what kind of objects are generated (e.g.
+persons, animals, objects, etc.), the location, and the size of these objects. This is a much more
+challenging task than generating a single object in the center of an image.
+Current work (Karacan et al., 2016; Johnson et al., 2018; Hong et al., 2018b; Wang et al., 2018) often
+approaches this challenge by using a semantic layout as additional conditional input. While this can
+be successful in controlling the image layout and object placement, it also places a high burden on
+the generating process since a complete scene layout must be obtained ﬁrst. We propose a model
+that does not require a full semantic layout, but instead only requires the desired object locations
+and identities (see Figure 1). One part of our model, called the global pathway, is responsible for
+generating the general layout of the complete image, while a second path, the object pathway, is used
+to explicitly generate the features of different objects based on the relevant object label and location.
+
+1
+
+
